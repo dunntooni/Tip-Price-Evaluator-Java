@@ -61,22 +61,70 @@ public class Main {
             System.out.print("Please give your server a rating between 1 and 5 stars: ");
             rating = myObj.nextInt();
             percent = ratingToPercent(rating);
-            System.out.println("Your tip percent is " + percent);
+            System.out.println("Your tip percent is " + percent + ".");
             inputInvalid = false;
         }
         return percent;
     }
 
+    private static float promptTipAmount(Scanner myObj) {
+        boolean inputInvalid = true;
+        float tip = 0.00f;
+        while (inputInvalid == true) {
+            System.out.print("Please enter the amount you'd like to tip: $");
+            tip = myObj.nextFloat();
+            inputInvalid = false;
+        }
+        return tip;
+    }
+
+    private static float percentToTip(int percent, float bill) {
+        return bill * ((float) percent / 100);
+    }
+
+    private static float getTip(float bill, Scanner myObj) {
+        float tip = 0.00f;
+        String userInput = "a";
+        var inputInvalid = true;
+        myObj.nextLine();
+        while (inputInvalid == true) {
+            System.out.println("------------------------------------------------------------------");
+            System.out.println("How would you like to calculate your tip?");
+            System.out.println("Type 'p' to input a percentage.");
+            System.out.println("Type 'q' to calculate a price based on the quality of your server.");
+            System.out.println("Type 'm' to manually input a tip amount.");
+            System.out.println("------------------------------------------------------------------");
+            System.out.print(">");
+            userInput = myObj.nextLine();
+            if (userInput.equals("p") || userInput.equals("q") || userInput.equals("m")) {
+                inputInvalid = false;
+            }
+        }
+        if (userInput.equals("p")) {
+            tip = percentToTip(promptPercentage(myObj), bill);
+        }
+        else if (userInput.equals("q")) {
+            tip = percentToTip(rateServer(myObj), bill);
+        }
+        else if (userInput.equals("m")) {
+            tip = promptTipAmount(myObj);
+        }
+        return tip;
+    }
+
+    private static float calculateTotal(float bill, float tip) {
+        float total = 0.00f;
+        total = bill + tip;
+        return total;
+    }
+
+    private static void displayTotal(float total) {
+        System.out.println("Your total is $" + String.format("%.2f", total) + ".");
+    }
     public static void main(String[] args) {
         Scanner myObj = new Scanner(System.in);
-        System.out.println("Hello World");
-        float bill = promptBillAmount(myObj), tip = 0.25f, total = 2.75f;
-        int percentage = promptPercentage(myObj);
-        System.out.println(bill);
-        System.out.println(percentage);
-        percentage = rateServer(myObj);
-        System.out.println(percentage);
-
+        float bill = promptBillAmount(myObj), tip = getTip(bill, myObj), total = calculateTotal(bill, tip);
+        displayTotal(total);
     }
 
 }
