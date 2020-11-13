@@ -87,6 +87,7 @@ public class Main {
         String userInput = "a";
         var inputInvalid = true;
         myObj.nextLine();
+        
         while (inputInvalid == true) {
             System.out.println("------------------------------------------------------------------");
             System.out.println("How would you like to calculate your tip?");
